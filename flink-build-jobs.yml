@@ -22,7 +22,7 @@ jobs:
 #       goals: 'clean install'
 #       timeoutInMinutes: 120
 
- - job: runEndToEndTests
+- job: runEndToEndTests
 #   condition: eq(variables['MODE'], 'e2e')
   pool: # we run the end to end tests on the msft hosted agents
     vmImage: 'ubuntu-latest'
