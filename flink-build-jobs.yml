@@ -1,29 +1,29 @@
 jobs:
-- job: runOnCustomMachines # = custom machines
-  condition: not(eq(variables['MODE'], 'e2e'))
-  pool:
-    name: Default
-  container:
-    image: rmetzger/flink-ci:ubuntu-jdk8-amd64-e005e00
-  timeoutInMinutes: 120
-  steps:
-  # Azure pipelines can only evaluate conditions with the build repo name in the steps.
-  # if the repo == "flink-ci/flink", we execute the steps
-  - task: Maven@3
-    condition: eq(variables['Build.Repository.Name'], 'flink-ci/flink')
-    inputs:
-      mavenPomFile: 'pom.xml'
-      mavenOptions: '-Xmx3072m'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.8'
-      jdkArchitectureOption: 'x64'
-      publishJUnitResults: true
-      testResultsFiles: '**/surefire-reports/TEST-*.xml'
-      goals: 'clean install'
-      timeoutInMinutes: 120
+# - job: runOnCustomMachines # = custom machines
+#   condition: not(eq(variables['MODE'], 'e2e'))
+#   pool:
+#     name: Default
+#   container:
+#     image: rmetzger/flink-ci:ubuntu-jdk8-amd64-e005e00
+#   timeoutInMinutes: 120
+#   steps:
+#   # Azure pipelines can only evaluate conditions with the build repo name in the steps.
+#   # if the repo == "flink-ci/flink", we execute the steps
+#   - task: Maven@3
+#     condition: eq(variables['Build.Repository.Name'], 'flink-ci/flink')
+#     inputs:
+#       mavenPomFile: 'pom.xml'
+#       mavenOptions: '-Xmx3072m'
+#       javaHomeOption: 'JDKVersion'
+#       jdkVersionOption: '1.8'
+#       jdkArchitectureOption: 'x64'
+#       publishJUnitResults: true
+#       testResultsFiles: '**/surefire-reports/TEST-*.xml'
+#       goals: 'clean install'
+#       timeoutInMinutes: 120
 
-- job: runEndToEndTests
-  condition: eq(variables['MODE'], 'e2e')
+ - job: runEndToEndTests
+#   condition: eq(variables['MODE'], 'e2e')
   pool: # we run the end to end tests on the msft hosted agents
     vmImage: 'ubuntu-latest'
   steps:
@@ -34,25 +34,25 @@ jobs:
     - script: FLINK_DIR=`pwd`/build-target flink-end-to-end-tests/run-nightly-tests.sh
       displayName: Run nightly e2e tests
 
-- job: runOnAzure
-  condition: not(eq(variables['MODE'], 'e2e'))
-  pool:
-    vmImage: 'ubuntu-latest'
-  container:
-    image: rmetzger/flink-ci:ubuntu-jdk8-amd64-e005e00
-  timeoutInMinutes: 240
-  steps:
-  # Azure pipelines can only evaluate conditions with the build repo name in the steps.
-  # if the repo != "flink-ci/flink", we execute
-  - task: Maven@3
-    condition: not(eq(variables['Build.Repository.Name'], 'flink-ci/flink'))
-    inputs:
-      mavenPomFile: 'pom.xml'
-      mavenOptions: '-Xmx3072m'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.8'
-      jdkArchitectureOption: 'x64'
-      publishJUnitResults: true
-      testResultsFiles: '**/surefire-reports/TEST-*.xml'
-      goals: 'clean install'
-      timeoutInMinutes: 240
+# - job: runOnAzure
+#   condition: not(eq(variables['MODE'], 'e2e'))
+#   pool:
+#     vmImage: 'ubuntu-latest'
+#   container:
+#     image: rmetzger/flink-ci:ubuntu-jdk8-amd64-e005e00
+#   timeoutInMinutes: 240
+#   steps:
+#   # Azure pipelines can only evaluate conditions with the build repo name in the steps.
+#   # if the repo != "flink-ci/flink", we execute
+#   - task: Maven@3
+#     condition: not(eq(variables['Build.Repository.Name'], 'flink-ci/flink'))
+#     inputs:
+#       mavenPomFile: 'pom.xml'
+#       mavenOptions: '-Xmx3072m'
+#       javaHomeOption: 'JDKVersion'
+#       jdkVersionOption: '1.8'
+#       jdkArchitectureOption: 'x64'
+#       publishJUnitResults: true
+#       testResultsFiles: '**/surefire-reports/TEST-*.xml'
+#       goals: 'clean install'
+#       timeoutInMinutes: 240
